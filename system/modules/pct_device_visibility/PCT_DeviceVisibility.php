@@ -28,7 +28,7 @@ class PCT_DeviceVisibility
  	 * Is mobile flag
  	 * @var boolean
  	 */
- 	protected $blnIsMobile = false;
+ 	protected static $blnIsMobile = false;
  	
  	
  	/**
@@ -36,8 +36,27 @@ class PCT_DeviceVisibility
  	 */
  	public function __construct()
  	{
-	 	$this->blnIsMobile = (boolean)\Environment::getInstance()->agent->mobile;
+	 	static::$blnIsMobile = (boolean)\Environment::get('agent')->mobile;
  	}
+
+	
+	/**
+	 * General check if a record or model should be visible
+	 * @param object	DatabaseResult or Model
+	 * @return boolean
+	 */
+	public static function isVisible($objRow)
+	{
+		$intDevice = (int)$objRow->pct_device;
+		
+		// mobile only || desktop only
+		if( ($intDevice === 1 && static::$blnIsMobile === false) || ($intDevice === 2 && static::$blnIsMobile === true) )
+		{
+			return false;
+		}
+		
+		return true;
+	}
  	
  	
  	/**
@@ -49,14 +68,10 @@ class PCT_DeviceVisibility
 	 */
 	public function getArticleCallback($objArticle)
 	{
-		$intDevice = (int)$objArticle->pct_device;
-		
-		// mobile only || desktop only
-		if( ($intDevice === 1 && $this->blnIsMobile === false) || ($intDevice === 2 && $this->blnIsMobile === true) )
+		if(static::isVisible($objArticle) === false)
 		{
 			$objArticle->published = 0;
-		}
-		
+		}		
 		return $objArticle;
 	}
 	
@@ -79,14 +94,11 @@ class PCT_DeviceVisibility
 		$arrReturn = array();
 		foreach($arrFields as $objModel)
 		{
-			$intDevice = (int)$objModel->pct_device;
-			
-			// mobile only || desktop only
-			if( ($intDevice === 1 && $this->blnIsMobile === false) || ($intDevice === 2 && $this->blnIsMobile === true) )
+			if(static::isVisible($objModel) === false)
 			{
 				continue;
 			}
-			
+		
 			$arrReturn[] = $objModel;
 		}
 		
@@ -104,14 +116,10 @@ class PCT_DeviceVisibility
 	 */
 	public function isVisibleElementCallback($objRow, $blnIsVisible)
 	{
-		$intDevice = (int)$objRow->pct_device;
-		
-		// mobile only || desktop only
-		if( ($intDevice === 1 && $this->blnIsMobile === false) || ($intDevice === 2 && $this->blnIsMobile === true) )
+		if(static::isVisible($objRow) === false)
 		{
 			return false;
 		}
-		
 		return $blnIsVisible;	
 	}
 }
