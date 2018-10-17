@@ -22,7 +22,6 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_cont
 $GLOBALS['TL_DCA']['tl_content']['fields']['pct_device'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['pct_device'],
-	'default'				  => 'auto',
 	'exclude'                 => true,
 	'inputType'               => 'select',
 	'options'				  => array(1,2),

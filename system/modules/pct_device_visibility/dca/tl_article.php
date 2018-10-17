@@ -22,7 +22,6 @@ $GLOBALS['TL_DCA']['tl_article']['subpalettes']['published'] .= ',pct_device';
 $GLOBALS['TL_DCA']['tl_article']['fields']['pct_device'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['pct_device'],
-	'default'				  => 'auto',
 	'exclude'                 => true,
 	'inputType'               => 'select',
 	'options'				  => array(1,2),
