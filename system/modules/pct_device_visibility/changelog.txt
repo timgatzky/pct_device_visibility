@@ -1,3 +1,6 @@
+### 1.1.3
+Fixed: tl_article.published is not a DCA selector anymore 
+
 ### 1.1.2
 Fixed: Wrong default value in DCA field configuration
 
