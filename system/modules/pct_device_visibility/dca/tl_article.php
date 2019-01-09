@@ -14,7 +14,7 @@
 /**
  * Subpalettes
  */
-$GLOBALS['TL_DCA']['tl_article']['subpalettes']['published'] .= ',pct_device';
+$GLOBALS['TL_DCA']['tl_article']['config']['onload_callback'][] = array('tl_article_pct_device_visibility', 'modifyDCA');
 
 /**
  * Fields
@@ -29,3 +29,25 @@ $GLOBALS['TL_DCA']['tl_article']['fields']['pct_device'] = array
 	'eval'                    => array('tl_class'=>'clr','includeBlankOption'=>true,'chosen'=>true),
 	'sql'					  => "int(2) NOT NULL default '0'",
 );
+
+/**
+ * Class
+ * tl_article_pct_device_visibility
+ */
+class tl_article_pct_device_visibility extends \Backend
+{
+	/**
+	 * Inject the device selection field
+	 */
+	public function modifyDCA()
+	{
+		if( array_key_exists('published',$GLOBALS['TL_DCA']['tl_article']['subpalettes']) )
+		{
+			$GLOBALS['TL_DCA']['tl_article']['subpalettes']['published'] .= ',pct_device';
+		}
+		else
+		{
+			$GLOBALS['TL_DCA']['tl_article']['palettes']['default'] = str_replace('published','published,pct_device',$GLOBALS['TL_DCA']['tl_article']['palettes']['default']);
+		}
+	}
+}
